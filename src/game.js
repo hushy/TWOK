@@ -2,6 +2,7 @@ const readline = require('readline-sync')
 const fs = require('fs');
 const path = require('path');
 
+// this is our monsters catalog
 const monsters = {
   killer_princess:
       {hp:20,atk:2},
@@ -10,12 +11,16 @@ const monsters = {
   crocodile:
       {hp:10,atk:1}
 }
+
+// this is the player stats
 var player = {
   hp:20,
   atk:3
 }
 
+/** This section is for toolbox function reused everywhere **/
 function game_over() {
+  display_art("game_over")
   console.log("game over");
 }
 // Function to display ASCII art
@@ -31,9 +36,6 @@ function player_choice(){
   return readline.question("What do you want to do?")
 }
 function fight(monster, victory, defeat){
-
-
-
   while (player.hp > 0 && monster.hp > 0){
     console.log("hp hero : " + player.hp)
     console.log("monster hp : " + monster.hp)
@@ -60,7 +62,7 @@ function fight(monster, victory, defeat){
   }
 
 }
-
+/** This section is for events in the game **/
 function dragon_lair(){
   display_art("Dragon")
   console.log("You have entered th dragons lair and awoken him. \n" +
@@ -79,6 +81,11 @@ function dragon_lair(){
 
 }
 
+function princess_death(){
+console.log("well done")
+ player.atk = player.atk + 1
+
+}
 function fake_princess_chamber(){
   display_art("princess")
   console.log("You climb the tower and find your self nose to nose with a princess.\n There" +
@@ -89,11 +96,12 @@ function fake_princess_chamber(){
       var choice = player_choice()
   switch (choice ) {
     case '1':
-      return
+      return fight(monsters.killer_princess,princess_death,game_over)
     case '2':
       return castle_entrance()
     case '3':
       return
+
   }
 }
 
@@ -106,7 +114,7 @@ function sewer_entrance(){
         var choice = player_choice()
   switch (choice ) {
     case '1':
-      return
+      return fight(monsters.crocodile,castle_entrance,game_over)
     case '2':
       return
     case '3':
@@ -116,14 +124,14 @@ function sewer_entrance(){
 
 function castle_entrance() {
   display_art("castle")
-  console.log("You arrive in front of a castle what do you do ?\n" +
+  console.log("You arrive in front of a castle.\n" +
       "1. Use the front door.\n" +
       "2. Climb the wall to the tower window\n" +
       "3. Go swim in the moar." )
   
       var choice = player_choice()
   
-  switch (choice ) {
+  switch (choice) {
     case '1':
       return dragon_lair()
     case '2':
@@ -134,6 +142,7 @@ function castle_entrance() {
 
 }
 
+/** This is the start of the game and the first event castle_entrance **/
 var name = readline.question(" what is your name ? ")
 console.log("Welcome to the Adventure Game "+name);
 
